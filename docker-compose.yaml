@@ -1,0 +1,28 @@
+version: "3"
+services:
+  sqler:
+    image: myapi/sqler:1.0
+    volumes:
+    - "./config/config-2-2-example.hcl:/app/config.example.hcl"
+    environment:
+    - "DSN=kaifa:123456@tcp(127.0.0.1:3306)/kaifa?multiStatements=true"
+    ports:
+    - "3678:3678"
+    - "8025:8025"
+  benthos:
+    image: jeffail/benthos
+    volumes:
+    - "./config/webhook.yaml:/benthos.yaml"
+    ports:
+    - "4195:4195"
+  mysqldb:
+    image: mysql:8.0.22
+    ports:
+      - 3306:3306
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: wangyu
+      MYSQL_DATABASE: kaifa
+      MYSQL_USER: kaifa
+      MYSQL_PASSWORD: 123456
+      TZ: Asia/Shanghai
